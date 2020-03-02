@@ -1,0 +1,7 @@
+bin/*
+bin*/
+build*/
+.vs/
+thirdparty*/
+models*/
+*pro.user
