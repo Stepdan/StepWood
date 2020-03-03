@@ -50,6 +50,7 @@ HEADERS += \
 	Thirdparty/EDLib/EDLines.h \
 	Thirdparty/EDLib/EDPF.h \
 	Thirdparty/EDLib/NFA.h \
+	UI/Interfaces/ICVScene.h \
 	UI/MainWindow.h \
 	UI/Scene/Scene.h \
 	Utils/FindPair.h \

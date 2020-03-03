@@ -3,9 +3,12 @@
 #include <memory>
 
 #include <QGraphicsView>
-#include <QGraphicsScene>
 
-class Scene : public QGraphicsView
+#include "Engine/Interfaces/ISceneController.h"
+
+class Scene
+    : public ISceneController
+    , public QGraphicsView
 {
     Q_OBJECT
 
@@ -13,12 +16,21 @@ public:
     explicit Scene(QWidget *parent = nullptr);
     ~Scene();
 
+/// ICVScene
+public:
+    void SetImage(const cv::Mat&, bool isNew = false) override;
+    const cv::Mat& GetImage() const override;
+    cv::Mat GetImage() override;
+    const cv::Mat& GetOrigImage() const override;
+    cv::Mat GetOrigImage() override;
+
 protected:
     void wheelEvent(QWheelEvent* event) override;
 
-public:
-    void SetImage(const QImage& image);
+private:
+    void UpdateImage();
 
 private:
-    QGraphicsScene m_scene;
+    class Impl;
+    std::unique_ptr<Impl> m_impl;
 };
