@@ -4,6 +4,8 @@
 
 #include <QMainWindow>
 
+#include "Engine/Interfaces/ISceneController.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -12,15 +14,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public:
+    ISceneController* GetSceneController() const;
+
 signals:
-    void stop();
+    void loadFile();
+    void saveFile();
+    void process();
+    void createDataset();
 
 private slots:
-    void OnLoad();
-    void OnSave();
-    void OnProcess();
     void OnBeforeAfter(bool isActiveBefore);
-    void OnHOG();
 
 private:
     void UpdateImage();

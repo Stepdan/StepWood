@@ -5,9 +5,11 @@ CONFIG += c++17
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
-	Dataset/DatasetWrapper.cpp \
 	Engine/Application.cpp \
 	Engine/Mediator.cpp \
+	ML/Dataset/DatasetUtils.cpp \
+	ML/Dataset/DatasetWrapper.cpp \
+	ML/Dataset/HawkwoodDataset.cpp \
 	Proc/Detector/CircleDetector.cpp \
 	Proc/Factory/DetectorFactory.cpp \
 	Proc/HOG/HOGEstimator.cpp \
@@ -26,15 +28,18 @@ SOURCES += \
 	UI/Scene/Scene.cpp \
 	Utils/Forwarder.cpp \
 	Utils/ImageUtils.cpp \
-	Utils/ThreadWorker.cpp \
 	main.cpp
 
 HEADERS += \
-	Dataset/DatasetWrapper.h \
 	Engine/Application.h \
+	Engine/Interfaces/ISceneController.h \
 	Engine/Mediator.h \
+	ML/Dataset/DatasetDescription.h \
+	ML/Dataset/DatasetItem.h \
+	ML/Dataset/DatasetUtils.h \
+	ML/Dataset/DatasetWrapper.h \
+	ML/Dataset/HawkwoodDataset.h \
 	Proc/Detector/BaseDetector.h \
-	Proc/Enums/DetectorType.h \
 	Proc/Factory/DetectorFactory.h \
 	Proc/HOG/HOGEstimator.h \
 	Proc/HOG/HOGTrainer.h \
@@ -50,7 +55,6 @@ HEADERS += \
 	Thirdparty/EDLib/EDLines.h \
 	Thirdparty/EDLib/EDPF.h \
 	Thirdparty/EDLib/NFA.h \
-	UI/Interfaces/ICVScene.h \
 	UI/MainWindow.h \
 	UI/Scene/Scene.h \
 	Utils/FindPair.h \

@@ -16,7 +16,7 @@ public:
     explicit Scene(QWidget *parent = nullptr);
     ~Scene();
 
-/// ICVScene
+/// ISceneController
 public:
     void SetImage(const cv::Mat&, bool isNew = false) override;
     const cv::Mat& GetImage() const override;
