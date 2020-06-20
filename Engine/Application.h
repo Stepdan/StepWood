@@ -16,4 +16,4 @@ public:
 * @brief Получение указателя на синглтон Application
 **/
 
-#define app (static_cast<EyeFactive::Application*>(QApplication::instance()))
+#define stepWoodApp (static_cast<Application*>(QApplication::instance()))

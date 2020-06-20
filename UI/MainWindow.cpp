@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_impl->ui.saveButton, &QAbstractButton::clicked, this, &MainWindow::saveFile);
     connect(m_impl->ui.processButton, &QAbstractButton::clicked, this, &MainWindow::process);
     connect(m_impl->ui.createDatasetButton, &QAbstractButton::clicked, this, &MainWindow::createDataset);
+    connect(m_impl->ui.svmTrainButton, &QAbstractButton::clicked, this, &MainWindow::svmTrain);
 
     connect(m_impl->ui.beforeAfterButton, &QAbstractButton::pressed, this, std::bind(&MainWindow::OnBeforeAfter, this, true));
     connect(m_impl->ui.beforeAfterButton, &QAbstractButton::released, this, std::bind(&MainWindow::OnBeforeAfter, this, false));

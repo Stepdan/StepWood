@@ -8,7 +8,7 @@ class BaseSettingsDetector
 {
 public:
     virtual ~BaseSettingsDetector() = default;
-    virtual const std::string & GetSettingsID() const noexcept = 0;
+    virtual const std::string & GetSettingsID() const noexcept { return "BaseSettingsDetector"; }
 
 protected:
     BaseSettingsDetector() = default;

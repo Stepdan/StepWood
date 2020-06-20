@@ -8,6 +8,8 @@
 
 #include "Utils/ImageUtils.h"
 
+#include "DeclareMetatype.h"
+
 #include "Scene.h"
 
 namespace {

@@ -7,8 +7,8 @@
 #include "Engine/Interfaces/ISceneController.h"
 
 class Scene
-    : public ISceneController
-    , public QGraphicsView
+    : public QGraphicsView
+    , public ISceneController
 {
     Q_OBJECT
 

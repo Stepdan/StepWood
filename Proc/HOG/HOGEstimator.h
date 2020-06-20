@@ -1,19 +1,19 @@
-#pragma once
+//#pragma once
 
-#include <memory>
-#include <string>
+//#include <memory>
+//#include <string>
 
-#include "HOGTrainer.h"
+//#include "HOGTrainer.h"
 
-class HOGEstimator
-{
-public:
-    HOGEstimator(const std::string& folder);
+//class HOGEstimator
+//{
+//public:
+//    HOGEstimator(const std::string& folder);
 
-private:
-    void Estimate(const std::string& folder);
-    void Train(const std::string& folder);
+//private:
+//    void Estimate(const std::string& folder);
+//    void Train(const std::string& folder);
 
-private:
-    std::unique_ptr<HOG> m_hogTrainer;
-};
+//private:
+//    std::unique_ptr<HOG> m_hogTrainer;
+//};

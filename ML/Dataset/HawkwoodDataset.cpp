@@ -12,10 +12,10 @@
 
 namespace {
 
-const std::string IMAGE_FILES_MASK      = "IMG_*";
+const std::string IMAGE_FILES_MASK      = "IMG_*.JPG";
 const std::string POSITIVE_FILES_MASK   = "woodlogs_*.txt";
 const std::string NEGATIVE_FILES_MASK   = "antiwoodlogs_*.txt";
-const std::string HAWKWOOD_IMAGES_DIR   = "/HAWKwood/Single Image Benchmark/S.1 and S.2 real";
+const std::string HAWKWOOD_IMAGES_DIR   = "/Single Image Benchmark/S.1 and S.2 real";
 
 }
 
@@ -29,15 +29,16 @@ public:
 
     void Parse(const std::string& path)
     {
-        QDir directory(QString::fromStdString(path + HAWKWOOD_IMAGES_DIR));
+        QString dirPath = QString::fromStdString(path + HAWKWOOD_IMAGES_DIR);
+        QDir directory(dirPath);
         QStringList imageFiles = directory.entryList(QStringList(IMAGE_FILES_MASK.data()));
         QStringList positiveFiles = directory.entryList(QStringList(POSITIVE_FILES_MASK.data()));
         QStringList negativeFiles = directory.entryList(QStringList(NEGATIVE_FILES_MASK.data()));
 
-        assert(positiveFiles.size() == negativeFiles.size() && positiveFiles.size() == imageFiles.size());
+        assert(positiveFiles.size() == negativeFiles.size() && imageFiles.size() == positiveFiles.size());
         m_items.clear();
         for(size_t i = 0, size = positiveFiles.size(); i <size; ++i)
-            m_items.emplace_back(imageFiles[i].toStdString(), ParseFile(positiveFiles[i]), ParseFile(negativeFiles[i]));
+            m_items.emplace_back(dirPath.toStdString() + "/" + imageFiles[i].toStdString(), ParseFile(dirPath + "/" + positiveFiles[i]), ParseFile(dirPath + "/" + negativeFiles[i]));
     }
 
 private:
@@ -51,7 +52,7 @@ private:
             while (!in.atEnd())
             {
                 const auto dataList = in.readLine().split(";");
-                rects.emplace_back(dataList[0], dataList[1], dataList[2], dataList[3]);
+                rects.emplace_back(dataList[0].toInt(), dataList[1].toInt(), dataList[2].toInt(), dataList[3].toInt());
             }
         }
 

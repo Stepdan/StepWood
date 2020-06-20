@@ -22,6 +22,7 @@ signals:
     void saveFile();
     void process();
     void createDataset();
+    void svmTrain();
 
 private slots:
     void OnBeforeAfter(bool isActiveBefore);

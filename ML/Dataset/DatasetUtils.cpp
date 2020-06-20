@@ -32,18 +32,22 @@ std::vector<cv::Mat> FlipRotateAugmentation(const cv::Mat& mat)
 
 //.....................................................................................
 
-DatasetItem FlipAugmentation(const DatasetItem& item, const std::string& flipSuffix /*= "_flip"*/)
+DatasetItem FlipAugmentation(const DatasetItem& item, const std::string& saveDir, const std::string& flipSuffix /*= "_flip"*/)
 {
     DatasetItem flippedItem;
     int w, h;
     {
+        const auto fileInfo = QFileInfo(item.path.data());
+        flippedItem.path = saveDir + "/" + fileInfo.baseName().toStdString() + flipSuffix + "." + fileInfo.suffix().toStdString();
+
         auto frame = cv::imread(item.path);
         w = frame.cols;
         h = frame.rows;
-        cv::flip(frame, frame, 1);
-        const auto fileInfo = QFileInfo(item.path.data());
-        flippedItem.path = fileInfo.baseName().toStdString() + flipSuffix + "." + fileInfo.suffix().toStdString();
-        cv::imwrite(flippedItem.path, frame);
+        if(!QFile(QString::fromStdString(flippedItem.path)).exists())
+        {
+            cv::flip(frame, frame, 1);
+            cv::imwrite(flippedItem.path, frame);
+        }
     }
 
     flippedItem.positiveRects.reserve(item.positiveRects.size());

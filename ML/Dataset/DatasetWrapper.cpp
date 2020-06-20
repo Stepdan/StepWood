@@ -1,6 +1,10 @@
 #include <fstream>
 
+#include <QDir>
+#include <QTextStream>
+
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
 
 #include "DatasetUtils.h"
 #include "HawkwoodDataset.h"
@@ -39,8 +43,8 @@ public:
             ParseHawkwood();
 
         auto hawkwoodData = m_hawkwoodDataset->GetHawkwoodData();
-
-
+        //SaveXML(hawkwoodData);
+        SaveSliced(hawkwoodData);
     }
 
 private:
@@ -51,56 +55,111 @@ private:
         m_hawkwoodDataset->Parse(m_desc.hawkwoodPath);
     }
 
-    void FlipRotateAugmentation(const DatasetItems& items)
-    {
-        for(const auto & item : items)
-        {
-            Utils::FlipRotateAugmentation()
-        }
-    }
-
     void SaveXML(const DatasetItems& hawkwoodItems)
     {
+        const auto dirPath = m_desc.outputDir + SEPARATOR + m_desc.xmlDesc.dirName;
+        if(!QDir(QString::fromStdString(dirPath)).exists())
+            QDir().mkdir(QString::fromStdString(dirPath));
+
+        const auto flipDirPath = m_desc.outputDir + SEPARATOR + m_desc.xmlDesc.flipDirName;
+        if(!QDir(QString::fromStdString(flipDirPath)).exists())
+            QDir().mkdir(QString::fromStdString(flipDirPath));
+
         auto items = hawkwoodItems;
         if(m_desc.xmlDesc.withFlipAugmentation)
         {
             DatasetItems flippedItems;
             flippedItems.reserve(items.size());
-            std::transform(items.cbegin(), items.cend(), std::back_inserter(flippedItems), std::bind(&Utils::FlipAugmentation, std::placeholders::_1));
+            std::transform(items.cbegin(), items.cend(), std::back_inserter(flippedItems), [&desc = m_desc, &flipDirPath](const auto& item) { return Utils::FlipAugmentation(item, flipDirPath); });
+            items.insert(items.cend(), flippedItems.cbegin(), flippedItems.cend());
         }
 
         size_t counter = START_VALUE;
         const auto getName = [this, &counter]() { return m_desc.xmlDesc.filename + std::to_string(counter++) + "." + m_desc.extension; };
 
         // @todo use normal xml-library
-        std::fstream xmlStream(m_desc.xmlDesc.dirName + SEPARATOR + m_desc.xmlDesc.xmlFilename);
-        xmlStream << "<?xml version='1.0' encoding='ISO-8859-1'?>" << std::endl;
-        xmlStream << "<dataset>" << std::endl;
-        xmlStream << "<images>" << std::endl;
+        std::string xmlPath = dirPath + SEPARATOR + m_desc.xmlDesc.xmlFilename;
+        auto file = QFile(QString::fromStdString(xmlPath));
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            assert(false);
+
+        QTextStream xmlStream(&file);
+        //std::fstream xmlStream(m_desc.xmlDesc.dirName + SEPARATOR + m_desc.xmlDesc.xmlFilename);
+        xmlStream << "<?xml version='1.0' encoding='ISO-8859-1'?>" << "\n";
+        xmlStream << "<dataset>" << "\n";
+        xmlStream << "<images>" << "\n";
         for(const auto& item : items)
         {
             const auto name = getName();
             auto image = cv::imread(item.path);
-            cv::imwrite(m_desc.xmlDesc.dirName + SEPARATOR + name, image);
-            xmlStream << "\t<image file='" << name << "'>" << std::endl;
+            const auto origRows = image.rows;
+            const auto origCols = image.cols;
+            const auto scaleFactor = 1.0 * m_desc.maxSize / std::max(image.rows, image.cols);
+            cv::resize(image, image, cv::Size(static_cast<int>(scaleFactor * image.cols), static_cast<int>(scaleFactor * image.rows)), 0, 0, cv::INTER_CUBIC);
+            cv::imwrite(m_desc.outputDir + SEPARATOR + m_desc.xmlDesc.dirName + SEPARATOR + name, image);
+            xmlStream << "\t<image file='" << QString::fromStdString(name) << "'>" << "\n";
             for(const auto& rect : item.positiveRects)
             {
-                if(IsRectInsideImage(rect, image.rows, image.cols))
-                    xmlStream << "\t\t<box top='" << rect.x << "' left='" << rect.y << "' width='" << rect.width << "' height='" << rect.height <<"'/>" << std::endl;
+                if(IsRectInsideImage(rect, origRows, origCols))
+                    xmlStream << "\t\t"
+                    << "<box top='"     << static_cast<int>(scaleFactor * rect.x)
+                    << "' left='"       << static_cast<int>(scaleFactor * rect.y)
+                    << "' width='"      << static_cast<int>(scaleFactor * rect.width)
+                    << "' height='"     << static_cast<int>(scaleFactor * rect.height)
+                    <<"'/>" << "\n";
             }
-            xmlStream << "\t</image>" << std::endl;
+            xmlStream << "\t</image>" << "\n";
         }
-        xmlStream << "</images>" << std::endl;
-        xmlStream << "</dataset>" << std::endl;
-        xmlStream.close();
+        xmlStream << "</images>" << "\n";
+        xmlStream << "</dataset>" << "\n";
     }
 
-    void SaveSliced(const DatasetItems& items)
+    void SaveSliced(const DatasetItems& hawkwoodItems)
     {
-        size_t counter = START_VALUE;
+        const auto CreateDirIfNotExist = [](const std::string& path)
+        {
+            if(!QDir(QString::fromStdString(path)).exists())
+                QDir().mkdir(QString::fromStdString(path));
+        };
+
+        const auto dirPath = m_desc.outputDir + SEPARATOR + m_desc.slicedDesc.dirName;
+        const auto positivePath = dirPath + SEPARATOR + m_desc.slicedDesc.positiveDir;
+        const auto negativePath = dirPath + SEPARATOR + m_desc.slicedDesc.negativeDir;
+
+        CreateDirIfNotExist(dirPath);
+        CreateDirIfNotExist(positivePath);
+        CreateDirIfNotExist(negativePath);
+
+        auto items = hawkwoodItems;
+        Utils::GenerateFakeNegative(items);
+
+        size_t posCounter = START_VALUE;
+        size_t negCounter = START_VALUE;
+        const auto getName = [this](const std::string& name, size_t& counter) { return name + std::to_string(counter++) + "." + m_desc.extension; };
+
         for(const auto& item : items)
         {
-            if(m_desc.xmlDesc.)
+            const auto image = cv::imread(item.path);
+
+            for(const auto& rect : item.positiveRects)
+            {
+                if(!IsRectInsideImage(rect, image.rows, image.cols))
+                    continue;
+
+                const auto roiImages = Utils::FlipRotateAugmentation(image(rect));
+                for(const auto roiImage : roiImages)
+                    cv::imwrite(positivePath + SEPARATOR + getName(m_desc.slicedDesc.positiveName, posCounter), roiImage);
+            }
+
+            for(const auto& rect : item.negativeRects)
+            {
+                if(!IsRectInsideImage(rect, image.rows, image.cols))
+                    continue;
+
+                const auto roiImages = Utils::FlipRotateAugmentation(image(rect));
+                for(const auto roiImage : roiImages)
+                    cv::imwrite(negativePath + SEPARATOR + getName(m_desc.slicedDesc.negativeName, negCounter), roiImage);
+            }
         }
     }
 

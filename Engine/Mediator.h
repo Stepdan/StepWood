@@ -19,6 +19,7 @@ private slots:
     void OnSave();
     void OnProcess();
     void OnDatasetProcess();
+    void OnSVMTrain();
 
 private:
     struct Impl;

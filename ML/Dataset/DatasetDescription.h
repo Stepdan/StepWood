@@ -6,6 +6,7 @@ struct XMLDescription
 {
     bool withFlipAugmentation;
     std::string dirName;
+    std::string flipDirName;
     std::string filename;
     std::string flipPrefix;
     std::string xmlFilename;
@@ -13,7 +14,7 @@ struct XMLDescription
 
 struct SlicedDescription
 {
-    bool withFlipRotateaugmentation;
+    bool withFlipRotateAugmentation;
 
     std::string dirName;
 
@@ -36,4 +37,6 @@ struct DatasetDescription
 
     XMLDescription xmlDesc;
     SlicedDescription slicedDesc;
+
+    int maxSize = 600;
 };

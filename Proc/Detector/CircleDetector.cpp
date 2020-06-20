@@ -20,6 +20,7 @@ std::pair<SettingsDetectorCircle::HoughMethod, cv::HoughModes> g_cvHoughMethodMa
     { SettingsDetectorCircle::HoughMethod::Probabilistic, cv::HOUGH_PROBABILISTIC   },
     { SettingsDetectorCircle::HoughMethod::MultiScale   , cv::HOUGH_MULTI_SCALE     },
     { SettingsDetectorCircle::HoughMethod::Gradient     , cv::HOUGH_GRADIENT        },
+    { SettingsDetectorCircle::HoughMethod::GradientAlt  , cv::HOUGH_GRADIENT_ALT    },
 };
 
 }
@@ -27,6 +28,8 @@ std::pair<SettingsDetectorCircle::HoughMethod, cv::HoughModes> g_cvHoughMethodMa
 class CircleDetector : public BaseDetector<SettingsDetectorCircle>
 {
 public:
+    ~CircleDetector() = default;
+
     void Detect(const cv::Mat& frame) override
     {
         switch(m_typedSettings.GetAlgorithm())
@@ -64,8 +67,7 @@ private:
     {
         auto procFrame = frame.clone();
         cv::cvtColor(procFrame, procFrame, cv::COLOR_BGR2GRAY);
-        cv::GaussianBlur(procFrame, procFrame, cv::Size(3, 3), 0);
-        cv::Canny(procFrame, procFrame, 50, 100);
+        cv::GaussianBlur(procFrame, procFrame, cv::Size(7, 7), 1.5, 1.5);
 
         std::vector<cv::Vec3f> circles;
         cv::HoughCircles(
@@ -82,7 +84,7 @@ private:
 
         Circles result;
         result.reserve(circles.size());
-        std::transform(circles.cbegin(), circles.cend(), std::back_inserter(result), [](const cv::Vec3f& c) { return Circle(c[0], c[1], c[2]); });
+        std::transform(circles.cbegin(), circles.cend(), std::back_inserter(result), [](const cv::Vec3f& c) { return Circle(c[2], c[0], c[1]); });
 
         return result;
     }
@@ -95,9 +97,9 @@ private:
 
 //.....................................................................................
 
-std::unique_ptr<Interfaces::IDetector> CreateCircleDetector(const BaseSettingsDetector& settings)
+std::shared_ptr<Interfaces::IDetector> CreateCircleDetector()
 {
-    return std::make_unique<Interfaces::IDetector>(CircleDetector());
+    return std::shared_ptr<Interfaces::IDetector>(new CircleDetector());
 }
 
 }
