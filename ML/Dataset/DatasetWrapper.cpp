@@ -43,8 +43,8 @@ public:
             ParseHawkwood();
 
         auto hawkwoodData = m_hawkwoodDataset->GetHawkwoodData();
-        //SaveXML(hawkwoodData);
-        SaveSliced(hawkwoodData);
+        SaveXML(hawkwoodData);
+        //SaveSliced(hawkwoodData);
     }
 
 private:

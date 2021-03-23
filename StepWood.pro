@@ -11,7 +11,7 @@ SOURCES += \
 	ML/Dataset/DatasetWrapper.cpp \
 	ML/Dataset/HawkwoodDataset.cpp \
 	ML/Trainer/HOGTrainer.cpp \
-	ML/Trainer/SVMTrainer.cpp \
+	#ML/Trainer/SVMTrainer.cpp \
 	Proc/Detector/CircleDetector.cpp \
 	Proc/Factory/DetectorFactory.cpp \
 	Proc/HOG/HOGEstimator.cpp \
@@ -45,7 +45,7 @@ HEADERS += \
 	ML/Dataset/DatasetWrapper.h \
 	ML/Dataset/HawkwoodDataset.h \
 	ML/Trainer/HOGTrainer.h \
-	ML/Trainer/SVMTrainer.h \
+	#ML/Trainer/SVMTrainer.h \
 	Proc/Detector/BaseDetector.h \
 	Proc/Factory/DetectorFactory.h \
 	Proc/HOG/HOGEstimator.h \
@@ -77,58 +77,55 @@ FORMS += \
 	UI/MainWindow.ui
 
 INCLUDEPATH += \
-"C:/StepTech/SDK/DLib/include" \
-"C:/StepTech/SDK/OpenCV/include"
+"C:/Projects/SDK/opencv/include"
 
 win32:CONFIG(release, debug|release): LIBS += \
-C:/StepTech/SDK/OpenCV/static/release/zlib.lib \
-C:/StepTech/SDK/OpenCV/static/release/IlmImf.lib \
-C:/StepTech/SDK/OpenCV/static/release/ittnotify.lib \
-C:/StepTech/SDK/OpenCV/static/release/libjasper.lib \
-C:/StepTech/SDK/OpenCV/static/release/libjpeg-turbo.lib \
-C:/StepTech/SDK/OpenCV/static/release/libpng.lib \
-C:/StepTech/SDK/OpenCV/static/release/libprotobuf.lib \
-C:/StepTech/SDK/OpenCV/static/release/libtiff.lib \
-C:/StepTech/SDK/OpenCV/static/release/libwebp.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_calib3d430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_core430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_dnn430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_features2d430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_flann430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_imgcodecs430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_imgproc430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_ml430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_objdetect430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_photo430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_stitching430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_video430.lib \
-C:/StepTech/SDK/OpenCV/static/release/opencv_videoio430.lib \
-C:/StepTech/SDK/Dlib/lib/dlib.lib
+C:/Projects/SDK/opencv/lib/release/zlib.lib \
+C:/Projects/SDK/opencv/lib/release/IlmImf.lib \
+#C:/Projects/SDK/opencv/lib/release/ittnotify.lib \
+C:/Projects/SDK/opencv/lib/release/libjasper.lib \
+C:/Projects/SDK/opencv/lib/release/libjpeg-turbo.lib \
+C:/Projects/SDK/opencv/lib/release/libpng.lib \
+C:/Projects/SDK/opencv/lib/release/libprotobuf.lib \
+#C:/Projects/SDK/opencv/lib/release/libtiff.lib \
+C:/Projects/SDK/opencv/lib/release/libwebp.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_calib3d430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_core430.lib \
+#C:/Projects/SDK/opencv/lib/release/opencv_dnn430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_features2d430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_flann430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_imgcodecs430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_imgproc430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_ml430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_objdetect430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_photo430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_stitching430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_video430.lib \
+C:/Projects/SDK/opencv/lib/release/opencv_videoio430.lib
 
 else:win32:CONFIG(debug, debug|release): LIBS += \
-C:/StepTech/SDK/OpenCV/static/debug/zlibd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/IlmImfd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/ittnotifyd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/libjasperd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/libjpeg-turbod.lib \
-C:/StepTech/SDK/OpenCV/static/debug/libpngd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/libprotobufd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/libtiffd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/libwebpd.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_calib3d430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_core430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_imgcodecs430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_imgproc430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_dnn430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_features2d430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_flann430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_ml430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_objdetect430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_photo430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_stitching430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_video430d.lib \
-C:/StepTech/SDK/OpenCV/static/debug/opencv_videoio430d.lib \
-C:/StepTech/SDK/Dlib/lib/dlibd.lib
+C:/Projects/SDK/opencv/lib/debug/zlibd.lib \
+C:/Projects/SDK/opencv/lib/debug/IlmImfd.lib \
+C:/Projects/SDK/opencv/lib/debug/ittnotifyd.lib \
+C:/Projects/SDK/opencv/lib/debug/libjasperd.lib \
+C:/Projects/SDK/opencv/lib/debug/libjpeg-turbod.lib \
+C:/Projects/SDK/opencv/lib/debug/libpngd.lib \
+C:/Projects/SDK/opencv/lib/debug/libprotobufd.lib \
+#C:/Projects/SDK/opencv/lib/debug/libtiffd.lib \
+C:/Projects/SDK/opencv/lib/debug/libwebpd.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_calib3d430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_core430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_imgcodecs430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_imgproc430d.lib \
+#C:/Projects/SDK/opencv/lib/debug/opencv_dnn430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_features2d430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_flann430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_ml430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_objdetect430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_photo430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_stitching430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_video430d.lib \
+C:/Projects/SDK/opencv/lib/debug/opencv_videoio430d.lib
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
